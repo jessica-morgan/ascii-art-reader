@@ -25,45 +25,27 @@ function pressEnter () {
   rl.question('Which file should I load? ', function (input) {
     rl.close()
     if (parseInt(input) === 1) {
-      getData('data/kea.txt', showData)
+      getImage('data/kea.txt', showImage)
     }
     if (parseInt(input) === 2) {
-      getData('data/kiwi.txt', showData)
+      getImage('data/kiwi.txt', showImage)
     }  
     if (parseInt(input) === 3) {
-      getData('data/nikau.txt', showData)
+      getImage('data/nikau.txt', showImage)
     }
     if (parseInt(input) === 4) {
-      getData('data/pohutukawa.txt', showData)
+      getImage('data/pohutukawa.txt', showImage)
     }
   })
 }
 
-/** prompt.message = ''
-prompt.delimiter = ': '
-prompt.start()
-
-const choice = {
-  name: 'choice',
-  hidden: true,
-  message: 'Make your choice'
-}
-
-prompt.get(choice, function (result) {
-  console.log("choice="+Object.values(choice)[1])
-  console.log("result="+result)
-  // Do something with result.choice here...
-  
-  console.log(choice[choice])
-})*/
-
-function getData (file, callback) {
+function getImage (file, callback) {
   const filepath = path.join(__dirname, file)
 
   fs.readFile(filepath, 'utf8', callback)
 }
 
-function showData (err, data) {
+function showImage (err, data) {
   if (err) {
     console.error(err)
   } else {
