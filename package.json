@@ -1,0 +1,22 @@
+{
+  "name": "ascii-art-reader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/harakeke-2019/ascii-art-reader.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index",
+    "test": "jest --watch --noStackTrace"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "nodemon": "^1.18.9"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "prompt": "^1.0.0",
+    "readline": "^1.3.0"
+  }
+}
