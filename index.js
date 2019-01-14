@@ -3,20 +3,30 @@ const prompt = require('prompt')
 const path = require('path')
 const fs = require('fs')
 module.exports = {
-
+  getImage,
+  pressEnter,
+  showImage
 }
 
-console.log('Welcome!')
+function displayMenu () {
+  console.log('Choose an artwork to display, or: \n' + 'c to comment \n' + 'e to erase comments \n' + 'v to view comments \n' + 'q to quit')
+  console.log()
+  const dirPath = path.join(__dirname, '/data')
+  fs.readdir(dirPath, 'utf-8', getFiles)
+}
 
-console.log('Choose an artwork to display, or: \n' + 'c to comment \n' + 'e to erase comments \n' + 'v to view comments \n' + 'q to quit')
+function getFiles (err, files) {
+  files = files.filter(item => item !== 'comments.txt')
+  if (err) { console.error(err) }
+  let str = ''
+  for (let i = 0; i < files.length; i++) {
+    str += (i + 1) + ': ' + files[i] + '\n'
+  }
+  console.log(str)
+  pressEnter(files)
+}
 
-console.log()
-
-console.log('1: Kea.txt \n' + '2: kiwi.txt \n' + '3. nikau.txt \n' + '4: pohutukawa.txt')
-
-pressEnter()
-
-function pressEnter () {
+function pressEnter (files) {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -24,25 +34,59 @@ function pressEnter () {
 
   rl.question('Which file should I load? ', function (input) {
     rl.close()
-    if (parseInt(input) === 1) {
-      getImage('data/kea.txt', showImage)
+    if (input === 'q') {
+      process.exit()
     }
-    if (parseInt(input) === 2) {
-      getImage('data/kiwi.txt', showImage)
-    }  
-    if (parseInt(input) === 3) {
-      getImage('data/nikau.txt', showImage)
+    if (input === 'c') {
+      leaveComments()
     }
-    if (parseInt(input) === 4) {
-      getImage('data/pohutukawa.txt', showImage)
+    if (input === 'v') {
+      getImage('data/comments.txt', showImage)
+    }
+    if (input === 'e') {
+      fs.writeFile('data/comments.txt', '', 'utf8', (err) => {
+        if (err) {
+          console.error(err)
+        } else {
+          console.log('Your comments have been deleted')
+        }
+      })
+    }
+    if (parseInt(input) <= 0 || parseInt(input) > files.length) {
+      console.error(err)
+    }
+    else {
+      const i = parseInt(input) - 1
+      console.log('files=' + files[i])
+      const filePath = path.join(__dirname, 'data/' + files[i])
+      console.log('filePath=' + filePath)
+      getImage(filePath, showImage)
     }
   })
 }
 
-function getImage (file, callback) {
-  const filepath = path.join(__dirname, file)
+function leaveComments () {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  })
 
-  fs.readFile(filepath, 'utf8', callback)
+  rl.question('Please leave your comments here: ', function (comments) {
+    rl.close()
+    comments = comments + '\n'
+    fs.appendFile('data/comments.txt', comments, 'utf8', (err) => {
+      if (err) {
+        console.error(err)
+      } else {
+        console.log('Your comments have been saved')
+      }
+    })
+  })
+}
+
+function getImage (file, callback) {
+  // const filepath = path.join(__dirname, file)
+  fs.readFile(file, 'utf8', callback)
 }
 
 function showImage (err, data) {
@@ -51,4 +95,12 @@ function showImage (err, data) {
   } else {
     console.log(data)
   }
+  displayMenu()
 }
+
+function setUps () {
+  console.log('Welcome!')
+  displayMenu()
+}
+
+setUps()
