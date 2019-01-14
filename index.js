@@ -5,7 +5,8 @@ const fs = require('fs')
 module.exports = {
   getImage,
   pressEnter,
-  showImage
+  showImage,
+  leaveComments
 }
 
 function displayMenu () {
@@ -57,9 +58,7 @@ function pressEnter (files) {
     }
     else {
       const i = parseInt(input) - 1
-      console.log('files=' + files[i])
       const filePath = path.join(__dirname, 'data/' + files[i])
-      console.log('filePath=' + filePath)
       getImage(filePath, showImage)
     }
   })
@@ -83,6 +82,7 @@ function leaveComments () {
     })
   })
 }
+
 
 function getImage (file, callback) {
   // const filepath = path.join(__dirname, file)
